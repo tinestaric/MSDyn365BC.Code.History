@@ -13,7 +13,7 @@ namespace System.ExternalFileStorage;
 table 9454 "File Scenario"
 {
     DataClassification = SystemMetadata;
-    Access = Internal;
+    Access = Public;
     ReplicateData = false;
     InherentPermissions = X;
     InherentEntitlements = X;
