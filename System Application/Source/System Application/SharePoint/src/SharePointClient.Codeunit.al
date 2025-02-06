@@ -509,6 +509,16 @@ codeunit 9100 "SharePoint Client"
         exit(SharePointClientImpl.UpdateListItemMetaDataField(ListId, ItemId, ListItemEntityTypeFullName, FieldName, FieldValue));
     end;
 
+    /// <summary>
+    /// Checks if a folder exists at the specified server relative URL.
+    /// </summary>
+    /// <param name="ServerRelativeUrl">The server relative URL of the folder to check.</param>
+    /// <returns>True if the folder exists; otherwise - false.</returns>
+    procedure FolderExists(ServerRelativeUrl: Text): Boolean
+    begin
+        exit(SharePointClientImpl.FolderExists(ServerRelativeUrl));
+    end;
+
     [IntegrationEvent(false, false)]
     /// <summary>
     /// Process SharePointFile Metadata - Use to extract custom meta data into model record

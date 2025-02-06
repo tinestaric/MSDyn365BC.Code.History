@@ -652,6 +652,32 @@ codeunit 9101 "SharePoint Client Impl."
         exit(true);
     end;
 
+    procedure FolderExists(ServerRelativeUrl: Text): Boolean
+    var
+        Result: Text;
+        JsonResult: JsonToken;
+    begin
+        SharePointUriBuilder.ResetPath();
+        SharePointUriBuilder.SetMethod('GetFolderByServerRelativeUrl', ServerRelativeUrl);
+        SharePointUriBuilder.SetObject('Exists');
+
+        SharePointRequestHelper.SetAuthorization(Authorization);
+        SharePointOperationResponse := SharePointRequestHelper.Get(SharePointUriBuilder);
+        if not SharePointOperationResponse.GetDiagnostics().IsSuccessStatusCode() then
+            exit(false);
+
+        if not SharePointOperationResponse.GetResultAsText(Result) then
+            Error(ReadResponseFailedErr);
+
+        JsonResult.ReadFrom(Result);
+
+        if not JsonResult.AsObject().Get('value', JsonResult) then
+            Error(IncorrectResponseErr);
+
+        exit(JsonResult.AsValue().AsBoolean());
+    end;
+
+
     procedure DeleteFolder(OdataId: Text): Boolean
     begin
         //DELETE https://{site_url}/_api/web/GetFolderByServerRelativeUrl('{folder_name}')
