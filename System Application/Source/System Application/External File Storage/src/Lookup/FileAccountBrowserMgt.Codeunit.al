@@ -81,6 +81,9 @@ codeunit 9458 "File Account Browser Mgt."
         TempFileAccountContentToAdd: Record "File Account Content" temporary;
         FilePaginationData: Codeunit "File Pagination Data";
     begin
+        // Add parent directory navigation regardless of DoNotLoadFields flag
+        AddParentDirectoryNavigation(TempFileAccountContent, CurrentPath);
+
         if DoNotLoadFields then
             exit;
 
@@ -102,7 +105,10 @@ codeunit 9458 "File Account Browser Mgt."
                 TempFileAccountContent.TransferFields(FileAccountContentToAdd);
                 TempFileAccountContent.Insert();
             until FileAccountContentToAdd.Next() = 0;
+    end;
 
+    local procedure AddParentDirectoryNavigation(var TempFileAccountContent: Record "File Account Content" temporary; CurrentPath: Text)
+    begin
         TempFileAccountContent.Init();
         TempFileAccountContent.Validate(Name, '..');
         TempFileAccountContent.Validate(Type, TempFileAccountContent.Type::Directory);
